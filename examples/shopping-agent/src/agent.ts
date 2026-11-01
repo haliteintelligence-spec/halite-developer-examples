@@ -64,8 +64,8 @@ async function main() {
     for (const reason of item.reasons.slice(0, 2)) console.log(`         ✓ ${reason}`)
     for (const warning of item.warnings) console.log(`         ! ${warning}`)
   }
-  if (avoided.length) {
-    console.log(`   Left out: ${avoided.map(i => byId.get(i.id)!.name).join(', ')} (${avoided[0]!.warnings[0] ?? 'contains something they avoid'})`)
+  for (const item of avoided) {
+    console.log(`   Left out: ${byId.get(item.id)!.name} (${item.warnings[0] ?? 'contains something they avoid'})`)
   }
   if (unanswered.length) {
     console.log(`   Not scored: ${unanswered.join(', ')}. They haven't answered that quiz, so the agent asks rather than guesses.`)
