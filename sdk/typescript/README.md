@@ -1,9 +1,9 @@
-# @halite/sdk
+# @haliteintelligence/sdk
 
 Server-side client for the [Halite Developer API](https://developers.haliteintelligence.com/docs): sign shoppers in with OAuth, read what they choose to share, follow consent changes, and verify webhooks. Node 18+, no dependencies.
 
 ```ts
-import { Halite } from '@halite/sdk'
+import { Halite } from '@haliteintelligence/sdk'
 
 const halite = new Halite({
   secretKey: process.env.HALITE_SECRET_KEY!, // hk_test_… — server-side only
@@ -29,7 +29,7 @@ const prefs = await shopper.preferences()
 ## Webhooks
 
 ```ts
-import { verifyWebhook, WebhookSignatureError } from '@halite/sdk'
+import { verifyWebhook, WebhookSignatureError } from '@haliteintelligence/sdk'
 
 app.post('/webhooks/halite', express.raw({ type: 'application/json' }), (req, res) => {
   try {

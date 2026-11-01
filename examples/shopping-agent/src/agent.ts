@@ -10,7 +10,7 @@
  * In production, step 1 is the OAuth flow; see ../merchant-personalization.
  */
 import { readFileSync } from 'node:fs'
-import { Halite, HaliteError, type RankProduct, type Scope } from '@halite/sdk'
+import { Halite, HaliteError, type RankProduct, type Scope } from '@haliteintelligence/sdk'
 
 const secretKey = process.env.HALITE_SECRET_KEY
 if (!secretKey?.startsWith('hk_test_')) {

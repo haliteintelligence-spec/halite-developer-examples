@@ -1,8 +1,29 @@
 {
-  "name": "@halite/sdk",
+  "name": "@haliteintelligence/sdk",
   "version": "0.1.0",
   "description": "Server-side client for the Halite Developer API: OAuth with PKCE, consumer data, events, webhook verification and sandbox helpers.",
   "license": "MIT",
+  "author": "Halite Intelligence",
+  "homepage": "https://developers.haliteintelligence.com/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haliteintelligence-spec/halite-developer-examples.git",
+    "directory": "sdk/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/haliteintelligence-spec/halite-developer-examples/issues"
+  },
+  "keywords": [
+    "halite",
+    "hallie",
+    "oauth",
+    "pkce",
+    "personalization",
+    "beauty",
+    "consumer-context",
+    "ai-agents",
+    "webhooks"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,14 +34,24 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md"],
-  "engines": { "node": ">=18" },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "smoke": "npm run build && node scripts/sandbox-smoke.mjs"
+    "smoke": "npm run build && node scripts/sandbox-smoke.mjs",
+    "prepublishOnly": "npm run type-check && npm test && npm run build"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
