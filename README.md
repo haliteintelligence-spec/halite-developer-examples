@@ -23,7 +23,7 @@ flowchart LR
 | [`docs/context-api.md`](docs/context-api.md) | Reading a shopper's context, ranking products for them, sending events back |
 | [`examples/shopping-agent`](examples/shopping-agent) | An agent that asks Halite about a shopper and picks products for them, in about 100 lines |
 | [`examples/merchant-personalization`](examples/merchant-personalization) | A store page that ranks its catalog for a shopper who connects, with the full OAuth flow |
-| [`sdk/typescript`](sdk/typescript) | `@haliteintelligence/sdk`: the server-side TypeScript client the examples use. Node 18+, no dependencies |
+| [`sdk/typescript`](sdk/typescript) | `@haliteintel/sdk`: the server-side TypeScript client the examples use. Node 18+, no dependencies |
 | [`openapi/openapi.json`](openapi/openapi.json) | The Developer API as OpenAPI 3.1, for generating clients in any language |
 
 ## Try it in five minutes
@@ -57,7 +57,7 @@ Test keys only ever reach six sample shoppers, so you can build and test without
 ## The same in a few lines
 
 ```ts
-import { Halite } from '@haliteintelligence/sdk'
+import { Halite } from '@haliteintel/sdk'
 
 const halite = new Halite({ secretKey: process.env.HALITE_SECRET_KEY!, clientId: process.env.HALITE_CLIENT_ID! })
 

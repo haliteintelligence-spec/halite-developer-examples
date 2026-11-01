@@ -9,7 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@haliteintelligence/sdk": "file:../../sdk/typescript"
+    "@haliteintel/sdk": "file:../../sdk/typescript"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

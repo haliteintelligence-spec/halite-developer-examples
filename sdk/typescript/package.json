@@ -1,5 +1,5 @@
 {
-  "name": "@haliteintelligence/sdk",
+  "name": "@haliteintel/sdk",
   "version": "0.1.0",
   "description": "Server-side client for the Halite Developer API: OAuth with PKCE, consumer data, events, webhook verification and sandbox helpers.",
   "license": "MIT",

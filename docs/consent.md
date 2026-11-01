@@ -100,7 +100,7 @@ Add an https endpoint on your app's **Webhooks** tab and copy its signing secret
 Every request carries `Halite-Signature: t=1793394570,v1=5257a8…`. `v1` is the hex HMAC-SHA256 of `"{t}.{raw body}"` with your endpoint secret. Compute it, compare in constant time, and refuse anything where `t` is more than five minutes old. During a secret rotation the header carries two `v1` values for 24 hours; accept a match on either.
 
 ```ts
-import { verifyWebhook, WebhookSignatureError } from '@haliteintelligence/sdk'
+import { verifyWebhook, WebhookSignatureError } from '@haliteintel/sdk'
 
 app.post('/webhooks/halite', express.raw({ type: 'application/json' }), (req, res) => {
   try {

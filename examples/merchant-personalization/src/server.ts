@@ -13,7 +13,7 @@
 import { randomBytes } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import express, { type Request, type Response } from 'express'
-import { Halite, HaliteError, WebhookSignatureError, verifyWebhook, type RankProduct, type Tokens } from '@haliteintelligence/sdk'
+import { Halite, HaliteError, WebhookSignatureError, verifyWebhook, type RankProduct, type Tokens } from '@haliteintel/sdk'
 
 const secretKey = process.env.HALITE_SECRET_KEY
 const clientId = process.env.HALITE_CLIENT_ID
