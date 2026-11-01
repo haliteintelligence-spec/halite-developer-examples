@@ -1,0 +1,4773 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Halite Developer API",
+    "version": "1.0.0",
+    "summary": "Permissioned shopper context for commerce apps and agents.",
+    "description": "Read what a consumer has chosen to share — preferences, interests, what they own and how it worked — after they approve your app on Halite's consent screen.\n\n**Two credentials.** Your *secret key* (`hk_test_…` / `hk_live_…`) identifies your app. A consumer's *access token* (`hla_…`), from the OAuth flow, is what lets you read that consumer. A secret key alone never reads consumer data.\n\n**Test first.** Test keys reach only six sandbox personas, never a real person.",
+    "contact": {
+      "name": "Halite developers",
+      "url": "https://developers.haliteintelligence.com/docs"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.haliteintelligence.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "OAuth",
+      "description": "Authorization code flow with PKCE (S256)."
+    },
+    {
+      "name": "Consumer data",
+      "description": "Called with a consumer's access token."
+    },
+    {
+      "name": "App",
+      "description": "Called with your secret key."
+    },
+    {
+      "name": "Events",
+      "description": "Consent changes, as a feed. The same events are sent to your webhooks."
+    },
+    {
+      "name": "Sandbox",
+      "description": "Test keys only."
+    }
+  ],
+  "webhooks": {
+    "consent.granted": {
+      "post": {
+        "summary": "A consumer connected your app.",
+        "parameters": [
+          {
+            "name": "Halite-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 10 seconds acknowledges the event."
+          }
+        }
+      }
+    },
+    "consent.updated": {
+      "post": {
+        "summary": "A consumer changed what your app may see.",
+        "parameters": [
+          {
+            "name": "Halite-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 10 seconds acknowledges the event."
+          }
+        }
+      }
+    },
+    "consent.revoked": {
+      "post": {
+        "summary": "A consumer disconnected your app, or it disconnected itself.",
+        "parameters": [
+          {
+            "name": "Halite-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 10 seconds acknowledges the event."
+          }
+        }
+      }
+    },
+    "consent.expired": {
+      "post": {
+        "summary": "A time-limited grant ran out.",
+        "parameters": [
+          {
+            "name": "Halite-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 10 seconds acknowledges the event."
+          }
+        }
+      }
+    },
+    "consumer.context.updated": {
+      "post": {
+        "summary": "Something your app can see about a consumer changed.",
+        "parameters": [
+          {
+            "name": "Halite-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Halite-Event-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx within 10 seconds acknowledges the event."
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/.well-known/oauth-authorization-server": {
+      "get": {
+        "tags": [
+          "OAuth"
+        ],
+        "summary": "Discovery document (RFC 8414)",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/authorize": {
+      "get": {
+        "tags": [
+          "OAuth"
+        ],
+        "summary": "Start sign-in",
+        "description": "Send the consumer's browser here. They approve on Halite's consent screen and come back to your `redirect_uri` with `code`, `state` and `iss` — or with `error`.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "response_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "code"
+              ]
+            }
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Your test or live client id (`app_test_…`)."
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must exactly match one registered for the environment."
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Space-delimited: profile.read, preferences.read, interests.read, purchases.read, purchases.retailers.read, context.read, context.write, offline_access."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque value you check on return, against CSRF."
+          },
+          {
+            "name": "code_challenge",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "base64url(SHA-256(code_verifier))."
+          },
+          {
+            "name": "code_challenge_method",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "S256"
+              ]
+            }
+          },
+          {
+            "name": "categories",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Space-delimited category keys; all when omitted. beauty.skincare, beauty.body, beauty.hair, beauty.makeup, beauty.fragrance, beauty.nails, beauty.wellness, beauty.sun_care, beauty.lip_care, beauty.eye_care."
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "To the consent screen, or back to your redirect_uri with an error."
+          },
+          "400": {
+            "description": "Unknown client_id or unregistered redirect_uri. Never redirected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "post": {
+        "tags": [
+          "OAuth"
+        ],
+        "summary": "Exchange a code or refresh token",
+        "description": "Authenticate with HTTP Basic: your client id and a secret key for the same environment. Refresh tokens rotate: each works once, and reusing one revokes every token from that sign-in.",
+        "security": [
+          {
+            "clientBasic": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "grant_type",
+                      "code",
+                      "redirect_uri",
+                      "code_verifier"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "const": "authorization_code"
+                      },
+                      "code": {
+                        "type": "string"
+                      },
+                      "redirect_uri": {
+                        "type": "string"
+                      },
+                      "code_verifier": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "grant_type",
+                      "refresh_token"
+                    ],
+                    "properties": {
+                      "grant_type": {
+                        "const": "refresh_token"
+                      },
+                      "refresh_token": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "type": "string",
+                        "description": "Optional: narrow the scopes."
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid_grant, invalid_scope, unsupported_grant_type, invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "invalid_client.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/revoke": {
+      "post": {
+        "tags": [
+          "OAuth"
+        ],
+        "summary": "Revoke a token (RFC 7009)",
+        "description": "Revoking a refresh token also revokes the access tokens from the same sign-in. Always answers 200.",
+        "security": [
+          {
+            "clientBasic": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Revoked, or nothing to revoke."
+          },
+          "401": {
+            "description": "invalid_client.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "The consumer",
+        "description": "Their id for your app, name, verified email, and the categories they share with you.\n\nRequires the `profile.read` scope. Live, needs the Identity & Consent (free) plan or higher.",
+        "x-halite-tier": "identity",
+        "security": [
+          {
+            "accessToken": [
+              "profile.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Consumer"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/preferences": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Preferences and sensitivities",
+        "description": "Skin, hair, makeup and fragrance preferences for the granted categories, plus ingredients they like, avoid or are cautious with.\n\nRequires the `preferences.read` scope. Live, needs the Consumer Context plan or higher; each successful call counts as a context retrieval, and a `304` (send `If-None-Match` with the `ETag`) is free.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/interests": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Interests",
+        "description": "Categories they shop, budget, occasions, and who they shop for.\n\nRequires the `interests.read` scope. Live, needs the Consumer Context plan or higher; each successful call counts as a context retrieval, and a `304` (send `If-None-Match` with the `ETag`) is free.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "interests.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Interests"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/purchases": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Products they own",
+        "description": "Products on their shelf in the granted categories, with their own ratings and outcomes. `retailer` is null unless they also granted `purchases.retailers.read`.\n\nRequires the `purchases.read` scope. Live, needs the Consumer Context plan or higher; each successful call counts as a context retrieval, and a `304` (send `If-None-Match` with the `ETag`) is free.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "purchases.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Purchases"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/context": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Patterns",
+        "description": "What kinds of product work for them, routines, seasonal direction and replenishment rhythm — never product or brand names.\n\nRequires the `context.read` scope. Live, needs the Consumer Context plan or higher; each successful call counts as a context retrieval, and a `304` (send `If-None-Match` with the `ETag`) is free.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "context.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Context"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/consent": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "What this consumer granted",
+        "description": "The scopes and categories of the grant behind this token.\n\nWorks with any valid access token. Live, needs the Identity & Consent (free) plan or higher.",
+        "x-halite-tier": "identity",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Consent"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Disconnect",
+        "description": "Your app disconnects itself from this consumer. Every token for them stops working; `consent.revoked` is sent.\n\nWorks with any valid access token. Live, needs the Identity & Consent (free) plan or higher.",
+        "x-halite-tier": "identity",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "consumer_id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "revoked"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/events": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Send what they did in your app",
+        "description": "Tell Halite what this consumer viewed, saved, added to cart, bought, returned, rated or searched for — up to 100 events at a time. Each event needs your own `id` (sending it again changes nothing, so retries are safe) and a `category` the consumer shared with you (`category_not_granted` otherwise). Include the product’s `attributes` and `ingredients`: they are what enriches the profile.\n\nEvents enrich the profile every app and brand reads, de-identified: what the products were made of and how they went, the categories they shop, how fast they rebuy. Only your app sees its events as named products. Searches are stored but never used. The consumer can see what you sent; disconnecting stops new events and keeps what was sent.\n\nRequires the `context.write` scope. Live, needs the Consumer Context plan or higher; never billed.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "context.write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextEventsAccepted"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContextEventsRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Events you sent",
+        "description": "What your app has sent for this consumer, newest first. Pass `next_before` as `before` for the next page.\n\nRequires the `context.write` scope. Live, needs the Consumer Context plan or higher; never billed.",
+        "x-halite-tier": "context",
+        "security": [
+          {
+            "accessToken": [
+              "context.write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContextEventPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/consumer/recommendations": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Report merchants’ products you showed them",
+        "description": "Tell Halite which products from merchants on Halite you showed this consumer — by Halite `product_id`, or `merchant` slug and `sku` — up to 50 at a time. Each comes back with a tracked `url`: send the shopper there instead of the product page. Following it records the click and redirects them to the product; if they buy it from that merchant within 30 days, the sale is credited to your app in the merchant’s dashboard. Live only (test keys get the plain product link and nothing is recorded). Never billed.\n\nWorks with any valid access token. Live, needs the Identity & Consent (free) plan or higher; never billed.",
+        "x-halite-tier": "identity",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppRecommendations"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppRecommendationsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/rank": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Rank products for this consumer",
+        "description": "Send up to 100 of your products; get them back best first, each with a match score, the reasons, any warnings, and `avoid` when it holds something they must not have. Uses only what the consumer granted you: interests add budgets, context adds what has worked for them. Costs 1 intelligence unit.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ranked"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RankRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/summary": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Summary for an AI agent",
+        "description": "The consumer in plain words, plus the same facts as lists (what they are solving for, what to prefer, what never to recommend). Built only from the scopes and categories granted. Costs 5 intelligence units.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/compatibility": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "How one product fits this consumer",
+        "description": "A match score, a verdict an app can act on without reading the score (`strong`, `good`, `fair`, `weak`, or `avoid` when it holds something they must not have), and the reasons and warnings behind it. Costs 1 intelligence unit.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Compatibility"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "product"
+                ],
+                "properties": {
+                  "product": {
+                    "$ref": "#/components/schemas/ProductInput"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/recommendations": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Score every product for this consumer",
+        "description": "Send up to 500 of your products; get every one back, best first, each with a match score, one sentence on why, and flags: `over_budget` (above what they usually spend in that category — shown, never dropped: it may be the one that solves for them), `avoid` (holds something they must not have) and `in_stock`. Nothing is left out. The top `picks` are marked `best_pick` — never one they must avoid or cannot buy now — and `per_type` keeps those varied. Costs 2 intelligence units.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recommendations"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecommendationsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/replenishment": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "What they are running out of",
+        "description": "From how fast they go through each kind of product (`context.read`) and, with `purchases.read`, when they last bought one: what is due within `within_days` or overdue, with a date and a confidence. Send your products to get the same product first, then the best alternatives of the same kind. When there is not enough to go on, `sufficient_data` is false and `reason` says why. Costs 2 intelligence units.\n\nRequires the `context.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "context.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Replenishment"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplenishmentRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/intent": {
+      "post": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Turn what they typed into filters",
+        "description": "Interprets a shopper’s request — “something for dry patches under $30, nothing scented” — into categories, product types, concerns, ingredients to avoid and a price ceiling, filled in from their profile where the request is silent. `sources` marks each filter as from the request, the profile or both. Fixed rules come first; a model is only a backup, used when the rules cannot tell what is being looked for (`interpreted_by` says which). When they are shopping for someone else, their own profile is left out. Categories they asked for but have not shared with your app are listed in `not_shared`. Costs 5 intelligence units.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Intent"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "query"
+                ],
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": [
+                      "beauty.skincare",
+                      "beauty.body",
+                      "beauty.hair",
+                      "beauty.makeup",
+                      "beauty.fragrance",
+                      "beauty.nails",
+                      "beauty.wellness",
+                      "beauty.sun_care",
+                      "beauty.lip_care",
+                      "beauty.eye_care"
+                    ],
+                    "description": "Where they are in your app, used when the request names no category."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/intelligence/enrich": {
+      "get": {
+        "tags": [
+          "Consumer data"
+        ],
+        "summary": "Preferences, enriched from their own products",
+        "description": "What they told Hallie, plus what their products show: ingredients and kinds of product that worked or failed (`context.read`), brands they go back to (`purchases.read`), routine and season. Each entry says whether it was stated, inferred or both, with the evidence; disagreements are listed in `conflicts`. Costs 10 intelligence units.\n\nRequires the `preferences.read` scope. Live, needs the Context Intelligence plan or higher; counted in intelligence units.",
+        "x-halite-tier": "intelligence",
+        "security": [
+          {
+            "accessToken": [
+              "preferences.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Enriched"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, expired or revoked token, or the consumer disconnected (`consent_revoked`). A secret key alone gets `access_token_required`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The endpoint is beyond the organization’s plan (`plan_required`, with a `Halite-Required-Tier` header), the paid plan is paused for an unpaid invoice (`billing_paused`), or the monthly overage cap is reached (`spend_cap_reached`). Test credentials reach every tier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The consumer did not grant the scope this endpoint needs (`insufficient_scope`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited. See `Retry-After`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/app": {
+      "get": {
+        "tags": [
+          "App"
+        ],
+        "summary": "Who this key belongs to",
+        "description": "The first call in every quickstart.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/grants": {
+      "get": {
+        "tags": [
+          "App"
+        ],
+        "summary": "Consumers connected to your app",
+        "description": "Test keys list sandbox grants. Live grants arrive with production access.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "grants": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Grant"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Event feed",
+        "description": "Oldest first. Pass the last id you processed as `after` to resume.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "consent.granted",
+                "consent.updated",
+                "consent.revoked",
+                "consent.expired",
+                "consumer.context.updated"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/personas": {
+      "get": {
+        "tags": [
+          "Sandbox"
+        ],
+        "summary": "Test personas",
+        "description": "The six sandbox consumers you can sign in as.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "personas": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Persona"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/grants": {
+      "post": {
+        "tags": [
+          "Sandbox"
+        ],
+        "summary": "Sign a persona in without the consent screen",
+        "description": "For automated tests: returns the same tokens /oauth/token would.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown persona, scope or category.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Live key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "persona",
+                  "scopes"
+                ],
+                "properties": {
+                  "persona": {
+                    "type": "string"
+                  },
+                  "scopes": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ]
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "beauty.skincare",
+                        "beauty.body",
+                        "beauty.hair",
+                        "beauty.makeup",
+                        "beauty.fragrance",
+                        "beauty.nails",
+                        "beauty.wellness",
+                        "beauty.sun_care",
+                        "beauty.lip_care",
+                        "beauty.eye_care"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/grants/{consumerId}/revoke": {
+      "post": {
+        "tags": [
+          "Sandbox"
+        ],
+        "summary": "Disconnect a sandbox consumer",
+        "description": "As if they disconnected your app from their Hallie account.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          },
+          {
+            "name": "consumerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "consumer_id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "revoked"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/webhooks/trigger": {
+      "post": {
+        "tags": [
+          "Sandbox"
+        ],
+        "summary": "Send a test event",
+        "description": "Delivers an event of any type to your test webhook endpoints, and adds it to the feed.",
+        "security": [
+          {
+            "secretKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Halite-Simulate",
+            "in": "header",
+            "required": false,
+            "description": "Test credentials only. Forces a failure so you can exercise your error handling.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rate_limit",
+                "server_error",
+                "consent_revoked",
+                "token_expired",
+                "insufficient_scope",
+                "timeout"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event_id": {
+                      "type": "string"
+                    },
+                    "deliveries": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "consent.granted",
+                      "consent.updated",
+                      "consent.revoked",
+                      "consent.expired",
+                      "consumer.context.updated"
+                    ]
+                  },
+                  "consumer_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/openapi.json": {
+      "get": {
+        "tags": [
+          "App"
+        ],
+        "summary": "This document",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "secretKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Your secret key: `hk_test_…` or `hk_live_…`. Server-side only."
+      },
+      "accessToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A consumer access token, `hla_…`, from /oauth/token."
+      },
+      "clientBasic": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Client id as username, secret key as password."
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": [
+              "type",
+              "code",
+              "message",
+              "request_id",
+              "doc_url"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "invalid_request_error",
+                  "authentication_error",
+                  "permission_error",
+                  "not_found_error",
+                  "rate_limit_error",
+                  "api_error"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "description": "Stable; branch on this."
+              },
+              "message": {
+                "type": "string",
+                "description": "For humans; may change."
+              },
+              "request_id": {
+                "type": "string"
+              },
+              "doc_url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "OAuthError": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in",
+          "scope",
+          "consumer_id"
+        ],
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "const": "Bearer"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "Only with offline_access."
+          },
+          "scope": {
+            "type": "string",
+            "description": "What the consumer approved, which may be less than you asked."
+          },
+          "consumer_id": {
+            "type": "string",
+            "description": "Stable for your app; no other app sees the same id."
+          }
+        }
+      },
+      "Consumer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Preferences": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "skin": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "The face. Granted with beauty.skincare, beauty.body or beauty.sun_care.",
+            "properties": {
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "tone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Everything they named, main concern first."
+              },
+              "primary_concern": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "What they said they are most trying to change."
+              },
+              "secondary_concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "hair": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "texture": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Everything they named, main concern first."
+              },
+              "primary_concern": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "What they said they are most trying to change."
+              },
+              "secondary_concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "body": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Body care, separate from the face. Granted with beauty.body.",
+            "properties": {
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "texture": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The texture they reach for, e.g. lotion, rich cream."
+              },
+              "scent": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "How scented they like body care, e.g. unscented, lightly scented, strongly scented."
+              },
+              "concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Everything they named, main concern first."
+              },
+              "primary_concern": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "What they said they are most trying to change."
+              },
+              "secondary_concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "makeup": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "finish": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "coverage": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "undertone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "fragrance": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "families": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "intensity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "longevity": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "sensitivity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ingredients": {
+            "type": "object",
+            "properties": {
+              "liked": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "avoided": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cautioned": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "handle_with_care": {
+            "type": "array",
+            "description": "Ingredients to keep from them, or to flag, and why. `allergy` and `avoids` should never be recommended; `reacts` can be, with a warning.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ingredient": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string",
+                  "enum": [
+                    "allergy",
+                    "avoids",
+                    "reacts"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "description": "Plain words you can show."
+                }
+              }
+            }
+          },
+          "tensions": {
+            "type": "array",
+            "description": "Two things they said that pull against each other, e.g. strongly scented body care with reactive skin. Shared only when you may see every category involved.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "note": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "routine_complexity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "minimal",
+              "moderate",
+              "extensive",
+              null
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "description": "0–1: how much there is to go on — what they stated, own and rated."
+          }
+        }
+      },
+      "Interests": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "budget": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "The highest of `budgets`.",
+            "properties": {
+              "per_product_max": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              }
+            }
+          },
+          "budgets": {
+            "type": "array",
+            "description": "What they spend per product, per granted category.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "per_product_max": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "occasions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shopping_for": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "OwnedProduct": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "product_type": {
+            "type": "string"
+          },
+          "retailer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "acquired_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rating": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "would_repurchase": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "outcome": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "loved",
+              "liked",
+              "neutral",
+              "disliked",
+              "reacted",
+              null
+            ]
+          },
+          "outcome_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Purchases": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OwnedProduct"
+            }
+          }
+        }
+      },
+      "Context": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "outcomes": {
+            "type": "object",
+            "properties": {
+              "positive": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "negative": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "aggregates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "product_type": {
+                  "type": "string"
+                },
+                "attributes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "avg_rating": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "products_count": {
+                  "type": "integer"
+                },
+                "repurchase_rate": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "routines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "time_of_day": {
+                  "type": "string",
+                  "enum": [
+                    "am",
+                    "pm",
+                    "any"
+                  ]
+                },
+                "days_used_last_30": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "steps": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "order": {
+                        "type": "integer"
+                      },
+                      "product_type": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "seasonal": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "season": {
+                "type": "string"
+              },
+              "direction": {
+                "type": "string"
+              },
+              "favour": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "replenishment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "product_type": {
+                  "type": "string"
+                },
+                "typical_days": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContextEvent": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "occurred_at",
+          "category"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Your id for the event, unique within your app."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "product_viewed",
+              "product_saved",
+              "added_to_cart",
+              "purchased",
+              "returned",
+              "rated",
+              "searched"
+            ]
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When it happened: within the last year, not in the future."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "beauty.skincare",
+              "beauty.body",
+              "beauty.hair",
+              "beauty.makeup",
+              "beauty.fragrance",
+              "beauty.nails",
+              "beauty.wellness",
+              "beauty.sun_care",
+              "beauty.lip_care",
+              "beauty.eye_care"
+            ],
+            "description": "Must be a category the consumer shared with your app."
+          },
+          "product": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "description": "Required for every type except `searched`.",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "brand": {
+                "type": "string"
+              },
+              "product_type": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "attributes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "What it is like: \"fragrance-free\", \"gel\", \"ceramides\". Shared with other apps de-identified; never its name or brand."
+              },
+              "ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Required for `rated`."
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "query": {
+            "type": "string",
+            "description": "Required for `searched`."
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "AppRecommendationsRequest": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 50,
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string"
+                },
+                "merchant": {
+                  "type": "string"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "rank": {
+                  "type": "integer"
+                },
+                "surface": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AppRecommendations": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string"
+                },
+                "merchant": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "tracked": {
+                  "type": "boolean"
+                },
+                "rank": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "unmatched": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "integer"
+                },
+                "reason": {
+                  "type": "string",
+                  "enum": [
+                    "unknown_merchant",
+                    "unknown_product",
+                    "no_product_url"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContextEventsRequest": {
+        "type": "object",
+        "required": [
+          "events"
+        ],
+        "properties": {
+          "events": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/ContextEvent"
+            }
+          }
+        }
+      },
+      "ContextEventsAccepted": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "stored",
+                    "duplicate"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContextEventPage": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ContextEvent"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "received_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "next_before": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO code; budgets are converted into it."
+          },
+          "category": {
+            "type": "string",
+            "description": "A category key such as beauty.skincare, so concerns and budgets match the right part of their profile."
+          },
+          "product_type": {
+            "type": "string",
+            "description": "Serum, shampoo, body butter… Used to keep recommendations varied and to match replenishment."
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "key_ingredients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "concerns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What the product is for, in any words: \"dark spots\", \"dryness\"."
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Anything else that describes it: \"fragrance-free\", \"gel\"."
+          },
+          "in_stock": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RankRequest": {
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "properties": {
+          "products": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/ProductInput"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        }
+      },
+      "Compatibility": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "match": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "good",
+              "fair",
+              "weak",
+              "avoid",
+              "needs_quiz"
+            ]
+          },
+          "missing_quiz": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "beauty.skincare",
+              "beauty.body",
+              "beauty.hair",
+              "beauty.makeup",
+              "beauty.fragrance",
+              "beauty.nails",
+              "beauty.wellness",
+              "beauty.sun_care",
+              "beauty.lip_care",
+              "beauty.eye_care",
+              null
+            ],
+            "description": "Their quiz for this product’s category is missing or barely started: ask them to take it. `match` is null then."
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "avoid": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RecommendationsRequest": {
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "properties": {
+          "products": {
+            "type": "array",
+            "maxItems": 500,
+            "items": {
+              "$ref": "#/components/schemas/ProductInput"
+            }
+          },
+          "picks": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 5,
+            "description": "How many to mark as best picks. Every product is returned either way."
+          },
+          "per_type": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 2,
+            "description": "At most this many best picks of one product_type."
+          }
+        }
+      },
+      "Recommendations": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "best_picks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Ids of the best picks, best first."
+          },
+          "items": {
+            "type": "array",
+            "description": "Every product sent, best first.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "rank": {
+                  "type": "integer"
+                },
+                "match": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "missing_quiz": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "beauty.skincare",
+                    "beauty.body",
+                    "beauty.hair",
+                    "beauty.makeup",
+                    "beauty.fragrance",
+                    "beauty.nails",
+                    "beauty.wellness",
+                    "beauty.sun_care",
+                    "beauty.lip_care",
+                    "beauty.eye_care",
+                    null
+                  ],
+                  "description": "Their quiz for this product’s category is missing or barely started: ask them to take it. `match` is null then."
+                },
+                "best_pick": {
+                  "type": "boolean"
+                },
+                "why": {
+                  "type": "string",
+                  "description": "The main reason, as one sentence for a product card."
+                },
+                "reasons": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "warnings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "avoid": {
+                  "type": "boolean"
+                },
+                "over_budget": {
+                  "type": "boolean",
+                  "description": "Above what they usually spend here. Informs; does not exclude."
+                },
+                "in_stock": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReplenishmentRequest": {
+        "type": "object",
+        "properties": {
+          "within_days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120,
+            "default": 30
+          },
+          "products": {
+            "type": "array",
+            "maxItems": 200,
+            "items": {
+              "$ref": "#/components/schemas/ProductInput"
+            },
+            "description": "Your products, to suggest the same one again or an alternative."
+          }
+        }
+      },
+      "Replenishment": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "sufficient_data": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "product_type": {
+                  "type": "string"
+                },
+                "typical_days": {
+                  "type": "integer"
+                },
+                "product": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "brand": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "last_bought_on": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "due_on": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "days_left": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "Negative once overdue."
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "overdue",
+                    "due_soon",
+                    "cadence_only"
+                  ]
+                },
+                "confidence": {
+                  "type": "number"
+                },
+                "suggestions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "match": {
+                        "type": "number"
+                      },
+                      "same_product": {
+                        "type": "boolean"
+                      },
+                      "reasons": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Intent": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "shopping_for": {
+            "type": "string",
+            "enum": [
+              "self",
+              "someone_else"
+            ]
+          },
+          "interpreted_by": {
+            "type": "string",
+            "enum": [
+              "rules",
+              "rules+model"
+            ],
+            "description": "Fixed rules always run first. A model fills in only when the rules cannot tell what is being looked for, and only fields they left empty."
+          },
+          "filters": {
+            "type": "object",
+            "properties": {
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "product_types": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "concerns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "avoid_ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "caution_ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "max_price": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  }
+                }
+              },
+              "skin_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hair_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "sources": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "request",
+                "profile",
+                "both"
+              ]
+            }
+          },
+          "not_shared": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Categories the request named that the consumer has not shared with your app."
+          },
+          "summary": {
+            "type": "string"
+          }
+        }
+      },
+      "EnrichedValue": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "stated",
+              "inferred",
+              "both"
+            ]
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "strength": {
+            "type": "number"
+          }
+        }
+      },
+      "Enriched": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "preferences": {
+            "type": "object",
+            "properties": {
+              "liked_ingredients": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EnrichedValue"
+                }
+              },
+              "avoid_ingredients": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EnrichedValue"
+                }
+              },
+              "caution_ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "product_types_that_work": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "product_type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "evidence": {
+                      "type": "string"
+                    },
+                    "strength": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "product_types_that_failed": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "product_type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "evidence": {
+                      "type": "string"
+                    },
+                    "strength": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "brands_that_worked": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EnrichedValue"
+                }
+              },
+              "routine": {
+                "type": "object",
+                "properties": {
+                  "complexity": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "source": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "routines": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "category": {
+                          "type": "string"
+                        },
+                        "time_of_day": {
+                          "type": "string"
+                        },
+                        "steps": {
+                          "type": "integer"
+                        },
+                        "days_used_last_30": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "seasonal": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "season": {
+                    "type": "string"
+                  },
+                  "direction": {
+                    "type": "string"
+                  },
+                  "favour": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "conflicts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inferred_count": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Ranked": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "rank": {
+                  "type": "integer"
+                },
+                "match": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "description": "0–100: how well it fits, measured only against what both their answers and your listing can speak to. Null when `missing_quiz` is set."
+                },
+                "missing_quiz": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "beauty.skincare",
+                    "beauty.body",
+                    "beauty.hair",
+                    "beauty.makeup",
+                    "beauty.fragrance",
+                    "beauty.nails",
+                    "beauty.wellness",
+                    "beauty.sun_care",
+                    "beauty.lip_care",
+                    "beauty.eye_care",
+                    null
+                  ],
+                  "description": "Their quiz for this product’s category is missing or barely started: ask them to take it. `match` is null then."
+                },
+                "reasons": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "warnings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "avoid": {
+                  "type": "boolean",
+                  "description": "Holds something they avoid or are allergic to: do not recommend."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Summary": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlights": {
+            "type": "object",
+            "properties": {
+              "solving_for": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "prefer": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "never_recommend": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "recommend_with_warning": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "budgets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "per_product_max": {
+                      "type": "number"
+                    },
+                    "currency": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "tensions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Consent": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "token_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "granted_at": {
+            "type": "string"
+          }
+        }
+      },
+      "App": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "test",
+              "live"
+            ]
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "production_status": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Grant": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string"
+          },
+          "persona": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "revoked"
+            ]
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "granted_at": {
+            "type": "string"
+          },
+          "revoked_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Persona": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "scenario": {
+            "type": "string"
+          },
+          "revoked": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "created",
+          "environment",
+          "data"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "consent.granted",
+              "consent.updated",
+              "consent.revoked",
+              "consent.expired",
+              "consumer.context.updated"
+            ]
+          },
+          "created": {
+            "type": "integer",
+            "description": "Unix seconds."
+          },
+          "environment": {
+            "type": "string",
+            "enum": [
+              "test",
+              "live"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "consumer_id": {
+                "type": "string"
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revoked_by": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "EventPage": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          },
+          "has_more": {
+            "type": "boolean"
+          },
+          "next_after": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "halite-merchant-personalization-example",
+  "private": true,
+  "type": "module",
+  "description": "A store page that ranks its products for a shopper who connects their Hallie profile.",
+  "scripts": {
+    "postinstall": "npm --prefix ../../sdk/typescript install --no-audit --no-fund && npm --prefix ../../sdk/typescript run build",
+    "start": "tsx src/server.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@halite/sdk": "file:../../sdk/typescript",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
+  }
+}

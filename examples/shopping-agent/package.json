@@ -1,0 +1,19 @@
+{
+  "name": "halite-shopping-agent-example",
+  "private": true,
+  "type": "module",
+  "description": "A shopping agent that asks Halite what a shopper wants, then picks products for them.",
+  "scripts": {
+    "postinstall": "npm --prefix ../../sdk/typescript install --no-audit --no-fund && npm --prefix ../../sdk/typescript run build",
+    "start": "tsx src/agent.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@halite/sdk": "file:../../sdk/typescript"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
+  }
+}
